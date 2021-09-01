@@ -1,0 +1,7 @@
+{
+    "file_path": "./core.log",
+    "with_console": true,
+    "file_log_level": "Trace",
+    "console_log_level": "Trace",
+    "console_layout": "<{h({l})}> [{d(%Y-%m-%d %H:%M:%S)}]{n}|-> msg:\"{m}\"{n}|-> file:{f}{n}|-> line:{L}{n}|-> pid:{P}{n}|-> thread:{T}{n}"
+}

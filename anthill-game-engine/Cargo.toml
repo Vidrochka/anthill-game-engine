@@ -1,0 +1,27 @@
+[package]
+name = "anthill-game-engine"
+version = "0.1.0"
+authors = ["Vidrochka <Evgenuy1605@yandex.ru>"]
+edition = "2018"
+build = "build.rs"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+tokio = { version = "*", features = ["full"] }
+log = "*"
+log4rs = "*"
+serde = { version = "*", features = ["derive"] }
+serde_derive = "*"
+serde_json = "*"
+gl = "*"
+anthill-macros-lib = { path = "../anthill-macros-lib" }
+anthill-window-lib = { path = "../anthill-window-lib" }
+
+[dependencies.chrono]
+chrono = "*"
+oldtime = false
+
+[dependencies.sdl2]
+version = "*"
+default-features = false

@@ -1,0 +1,7 @@
+[workspace]
+
+members = [
+    "anthill-game-engine",
+    "anthill-macros-lib",
+    "anthill-window-lib"
+]
