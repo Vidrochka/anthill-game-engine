@@ -10,6 +10,10 @@ dependencies = [
 ]
 
 [[package]]
+name = "anthill-di-lib"
+version = "0.1.0"
+
+[[package]]
 name = "anthill-game-engine"
 version = "0.1.0"
 dependencies = [
