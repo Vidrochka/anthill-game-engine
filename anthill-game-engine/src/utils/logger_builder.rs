@@ -16,8 +16,8 @@ pub struct LoggerBuilder {
 }
 
 impl LoggerBuilder {
-    pub async fn build() -> Result<Handle,String> {
-        let config = LoggerConfig::load().await?;
+    pub fn build(config: LoggerConfig) -> Result<Handle,String> {
+        //let config = LoggerConfig::load()?;
 
         let mut log_config_builder = Config::builder()
             .appender

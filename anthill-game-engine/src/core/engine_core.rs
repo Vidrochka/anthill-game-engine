@@ -9,6 +9,8 @@ use crate::gui::{
 use crate::config::CoreConfig;
 use std::sync::{Arc,Mutex};
 
+use anthill_di::Injection;
+
 pub struct EngineCore {
     time_tracker: Arc<Mutex<TimeTracker>>,
     //window_system: Arc<Mutex<WindowSystem>>,
@@ -18,36 +20,22 @@ pub struct EngineCore {
     //window: Arc<Mutex<Window>>,
 }
 
-impl EngineCore {
-    pub async fn new() -> Result<EngineCore,String> {
-        let log_handle = LoggerBuilder::build().await?;
-        let config = tokio::spawn(async { CoreConfig::load().await });
-        
-        //let window_system = WindowSystem::new();
-
-        //let window_builder = WindowBuilder::new(Arc::clone(&window_system));
-        
-        let config = config.await.map_err(|e|e.to_string())??;
-        //let window = window_builder.build(config.render_api, WindowBuildOptions{lable: "Anthill game engine".to_string(), width: 800, height: 600});   
-        //window.lock().map_err(|e|e.to_string())?.show();
-
-        let time_tracker = TimeTracker::new().wrap_to_arc_mutex();
-
-        let core = EngineCore
-        {
-            time_tracker: time_tracker,
-            //window_system: window_system,
-            config: config,
-            log_handle: log_handle,
-            is_closed: false,
-            //window: window,
+impl Injection for EngineCore {
+    fn build_injection(injector: &mut anthill_di::Injector) -> Result<Self, anthill_di::DiError> {
+        let core = Self {
+            log_handle: injector.get_new_instance()?,
+            time_tracker: injector.get_singletone()?,
+            config: injector.get_new_instance()?,    
+            is_closed: false
         };
 
         log::info!("Core created");
-
-        Result::Ok(core)
+        
+        Ok(core)
     }
-    
+}
+
+impl EngineCore {
     pub fn run(&mut self) -> Result<(), String> {
         loop {
             self.time_tracker.lock().map_err(|e|e.to_string())?.new_step();

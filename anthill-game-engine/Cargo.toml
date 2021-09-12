@@ -15,12 +15,14 @@ serde = { version = "*", features = ["derive"] }
 serde_derive = "*"
 serde_json = "*"
 gl = "*"
+chrono = "*"
+anthill-di = "*"
 anthill-macros-lib = { path = "../anthill-macros-lib" }
 anthill-window-lib = { path = "../anthill-window-lib" }
 
-[dependencies.chrono]
-chrono = "*"
-oldtime = false
+#[dependencies.chrono]
+#chrono = "*"
+#oldtime = false
 
 [dependencies.sdl2]
 version = "*"

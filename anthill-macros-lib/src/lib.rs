@@ -34,16 +34,10 @@ pub fn config_file(args: proc_macro::TokenStream, item: proc_macro::TokenStream)
         #input
 
         impl #name {
-            pub async fn load() -> Result<Self, String> {
+            pub fn load() -> Result<Self, String> {
                 use serde::de::Deserialize;
                 log::info!("Config [{}] loading...", #file_path);
-                let data = tokio::fs::read(#file_path).await;
-                //let data = data.map_err(|e:std::io::Error| e.to_string())?;
-                let data = match data {
-                    Result::Ok(result) => result,
-                    Result::Err(err) => return Result::Err(err.to_string()),
-                };
-                let data = String::from_utf8(data).map_err(|e| e.to_string() )?;
+                let data = std::fs::read_to_string(#file_path).map_err(|e| e.to_string())?;
                 let obj = serde_json::from_str(&*data).map_err(|e| e.to_string())?;
                 log::info!("Config [{}] loaded", #file_path);
                 Result::Ok(obj)
@@ -68,6 +62,22 @@ pub fn config_file(args: proc_macro::TokenStream, item: proc_macro::TokenStream)
 
     result.into()
 }
+
+/* pub async fn load() -> Result<Self, String> {
+                use serde::de::Deserialize;
+                log::info!("Config [{}] loading...", #file_path);
+                let data = tokio::fs::read(#file_path).await;
+                //let data = data.map_err(|e:std::io::Error| e.to_string())?;
+                let data = match data {
+                    Result::Ok(result) => result,
+                    Result::Err(err) => return Result::Err(err.to_string()),
+                };
+                let data = String::from_utf8(data).map_err(|e| e.to_string() )?;
+                let obj = serde_json::from_str(&*data).map_err(|e| e.to_string())?;
+                log::info!("Config [{}] loaded", #file_path);
+                Result::Ok(obj)
+            } */
+
 
 /*
             pub async fn load() -> std::io::Result<Self> {

@@ -1,7 +1,0 @@
-[package]
-name = "anthill-di-lib"
-version = "0.1.0"
-authors = ["Vidrochka <Evgenuy1605@yandex.ru>"]
-edition = "2018"
-
-[dependencies]

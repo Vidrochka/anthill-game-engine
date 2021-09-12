@@ -1,10 +1,23 @@
 use std::sync::{Arc, Mutex};
 use chrono::prelude::*;
+use anthill_di::Injection;
 
 pub struct TimeTracker {
     track_time: DateTime<Utc>,
     last_step_duration: chrono::Duration,
     fps: f32
+}
+
+impl Injection for TimeTracker {
+    fn build_injection(injector: &mut anthill_di::Injector) -> Result<Self, anthill_di::DiError> {
+        log::info!("time tracker initializing...");
+        let tt = TimeTracker {
+            track_time: Utc::now(),
+            last_step_duration: chrono::Duration::seconds(1) / 60,
+            fps: 60.0};
+        log::info!("time tracker initialized");
+        Ok(tt)
+    }
 }
 
 impl TimeTracker {
