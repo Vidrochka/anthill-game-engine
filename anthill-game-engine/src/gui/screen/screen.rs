@@ -1,33 +1,30 @@
 use std::sync::{Arc, Mutex};
 
-use anthill_window_lib::gui::{draweable::TDraweable, layout_builder::TLayoutBuilder, screen::TScreen};
-use crate::gui::layouts::new_project::NewProjectLayoutBuilder;
+use anthill_di::{DiError, Injection};
+use anthill_window_lib::gui::mvc::TView;
+use anthill_window_lib::gui::{draweable::TDraweable, screen::TScreen};
+use crate::core::state::{CoreState, State};
+use crate::gui::controllers::new_project::NewProjectController;
+use crate::gui::models::new_project::NewProject;
 
-enum State {
-    CreateProject
+pub struct Screen {
+    state: Arc<Mutex<CoreState>>,
+    new_project_view: Box<dyn TView<NewProjectController,NewProject>>,
 }
 
-struct Screen {
-    state: State,
-    new_project_layout: Option<Box<dyn TDraweable>>,
-}
-
-impl Screen {
-    fn new(state: State) -> Self {
-        Self {state: state, new_project_layout: None}
+impl Injection for Screen {
+    fn build_injection(injector: &mut anthill_di::Injector) -> Result<Self, DiError> {
+        Ok(Self{
+            state: injector.get_singletone()?,
+            new_project_view: injector.get_new_instance()?,
+        })
     }
 }
 
 impl TScreen for Screen {
-    fn init(&mut self) {
-        let new_project_layout_builder = NewProjectLayoutBuilder::default();
-        let  new_project_layout = new_project_layout_builder.build_layout();
-        self.new_project_layout = Some(new_project_layout);
-    }
-
-    fn get_screen(&self) -> &Option<Box<dyn TDraweable>> {
-        match self.state {
-            State::CreateProject => &self.new_project_layout,
+    fn draw_frame(&self) {
+        match self.state.lock().unwrap().get_state() {
+            State::CreateProject => self.new_project_view.draw(),
         }
     }
 }

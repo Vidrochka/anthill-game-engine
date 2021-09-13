@@ -1,6 +1,12 @@
+use anthill_di::Injection;
 
-#[derive(Default)]
 pub struct NewProject {
-    pub name: String,
-    pub path: String,
+    pub name: Option<String>,
+    pub path: Option<String>,
+}
+
+impl Injection for NewProject {
+    fn build_injection(injector: &mut anthill_di::Injector) -> Result<Self, anthill_di::DiError> {
+        Ok(Self{name: None, path: None})
+    }
 }
